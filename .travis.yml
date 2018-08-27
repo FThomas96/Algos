@@ -66,3 +66,4 @@ script:
     
 after_success:
   - coveralls --root . -E ".*gtest.*" -E ".*CMakeFiles.*"
+  - bash <(curl -s https://codecov.io/bash)
