@@ -14,7 +14,7 @@ matrix:
             - g++-6
       env:
         - COMPILER='g++-6'
-
+      
     # Linux GCC 7 build
     - os: linux
       compiler: gcc
@@ -51,35 +51,9 @@ matrix:
       env:
         - COMPILER='clang++-5.0'
 
-    # OS X Xcode8 GCC build
-    - os: osx
-      osx_image: xcode8.3
-      compiler: gcc
-      env:
-        - COMPILER='g++'
-
-    # OS X Xcode9 GCC build
-    - os: osx
-      osx_image: xcode9.2
-      compiler: gcc
-      env:
-        - COMPILER='g++'
-
-    # OS X Xcode8 Clang build
-    - os: osx
-      osx_image: xcode8.3
-      compiler: clang
-      env:
-        - COMPILER='clang++'
-
-    # OS X Xcode9 Clang build
-    - os: osx
-      osx_image: xcode9.2
-      compiler: clang
-      env:
-        - COMPILER='clang++'
-
+        
 before_install:
+  - pip install --user cpp-coveralls
   - export CXX=${COMPILER}
 
 install: true
@@ -89,3 +63,6 @@ script:
     cd C++
     make
     make test
+    
+after_success:
+  - coveralls 
