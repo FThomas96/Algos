@@ -65,4 +65,4 @@ script:
     make test
     
 after_success:
-  - coveralls 
+  - coveralls --root . -E ".*gtest.*" -E ".*CMakeFiles.*"
