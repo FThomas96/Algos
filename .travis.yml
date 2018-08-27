@@ -1,6 +1,12 @@
 language: cpp
 sudo: required
 
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "mYIZ8i3YCa0Auorq7pu/PEi/8I9L4KvbxPxUCvuMpUPuKS045/5OCjyv5y18Jc3hS9MXRbOtJ7kaUNcwN/YI66/TY9BJKFtxViITjkIm/t91A4k4ZmxDNMWKs1XFAxDhcsQW19153hIISv4MesweUG/tjt+r1cyJMFJ+dNPG6B5A0gccgMKVM+xUle9c5yrpDYqz2haZrzFA5WT5/Y3vDd6aMI/+nO4e3Gc7p82Xf9jnlOCEPXAxXGjTry1Wg2FHH49aR7nhwWNo1Ea6Aq0D5rjeG7K862PprNQ9C+jYSN/0xjOKete2Xad7MkOxxdssFFiHP+C7sBId9aJ4k7y84hF20nZT0ScEqGN8YQiG8OBiNOtN3nyibqeSA5ynispyLr+mzim7y0W+Lj6/SR2HinYF6WwhMd3NU1myGpgQAci7eOjBfFHG7GM2pVelMi2qszqoRlOZ441O83WuMszJsPqyzfnpf4eg+JS8lrw9cphYM/NX0P6m+cYtwENJPCRwCNJ9A3Z7qffd12V0LlBGOxDqOsOL8Lstvn0rbb9lEReavyyP2S4DoCjQcOmwi1orSvUB9UiQAKgkE6iwvfLyG8uizGBF0wm2y1v/Uv4JQFNjHxLYAQ+u5TSahS5qAUsC6Dj1sdU4c3kqoQGyCZRDUGgJSQ5IxhT3sXbI4PrCGT8="
+
 matrix:
   include:
     # Linux GCC 6 build
@@ -55,6 +61,7 @@ matrix:
 before_install:
   - pip install --user cpp-coveralls
   - export CXX=${COMPILER}
+  - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 
 install: true
 
@@ -66,3 +73,13 @@ script:
     
 after_success:
   - coveralls 
+
+addons:
+  coverity_scan:
+    project:
+      name: shaunleejx/Algos
+      description: SCC Project
+    notification_email: shaunlee.jenxian@hotmail.com
+    build_command_prepend: ./configure
+    build_command: make
+    branch_pattern: coverity_scan
